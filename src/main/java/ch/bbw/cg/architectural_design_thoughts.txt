@@ -1,0 +1,7 @@
+There are some questions I asked myself during the process:
+1. How do I define the game board and its cells?
+    --> for standard rules I guess it works to think of the board as a whole and just take a two-dimensional array with rows and columns defined as integer. The position is sufficient.
+
+2. Problem was, that the two-dimensional array needs 2 states, because I change the cells directly in the array one by one. So every change directly impacts the amount of neighbour cells. There should be the whole board first processed before calculating the next generation.
+    --> My second thought was to
+2. How should I apply the rules on the board of cells?
