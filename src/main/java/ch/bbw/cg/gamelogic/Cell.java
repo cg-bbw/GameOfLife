@@ -20,13 +20,15 @@ public class Cell {
     // No need for the color attribute, because it is defined by the state
     private static final Map<CellState, Color> colors = Map.of(
             CellState.ALIVE, Color.LIGHTGREEN,
-            CellState.DEAD, Color.BLACK,
+            CellState.DEAD, Color.GREY,
             CellState.UNDEAD, Color.DARKGREY,
             CellState.INFECTED, Color.GREENYELLOW,
             CellState.PREGNANT, Color.FORESTGREEN,
             CellState.PROTECTED, Color.LIGHTBLUE);
 
     //TODO use generation as age and for a limited life span
+    // generation in this case means age of the cell, because we are not
+    // adding new cells to the board, as it would be the case in a real life simulation
     private int generation;
 
     // Neighbour cells
@@ -134,7 +136,46 @@ public class Cell {
         this.leftCell = cell;
     }
 
-    public void calculateNextState() {
-
+    public int amountOfNeighboursWithState(CellState state) {
+        int cellsWithState = 0;
+        switch (state) {
+            case ALIVE:
+                if(topLeftCell.getState()==CellState.ALIVE)
+                    cellsWithState++;
+                if(topCell.getState()==CellState.ALIVE)
+                    cellsWithState++;
+                if(topRightCell.getState()==CellState.ALIVE)
+                    cellsWithState++;
+                if(rightCell.getState()==CellState.ALIVE)
+                    cellsWithState++;
+                if(bottomRightCell.getState()==CellState.ALIVE)
+                    cellsWithState++;
+                if(bottomCell.getState()==CellState.ALIVE)
+                    cellsWithState++;
+                if(bottomLeftCell.getState()==CellState.ALIVE)
+                    cellsWithState++;
+                if(leftCell.getState()==CellState.ALIVE)
+                    cellsWithState++;
+                break;
+            case DEAD:
+                if(topLeftCell.getState()==CellState.DEAD)
+                    cellsWithState++;
+                if(topCell.getState()==CellState.DEAD)
+                    cellsWithState++;
+                if(topRightCell.getState()==CellState.DEAD)
+                    cellsWithState++;
+                if(rightCell.getState()==CellState.DEAD)
+                    cellsWithState++;
+                if(bottomRightCell.getState()==CellState.DEAD)
+                    cellsWithState++;
+                if(bottomCell.getState()==CellState.DEAD)
+                    cellsWithState++;
+                if(bottomLeftCell.getState()==CellState.DEAD)
+                    cellsWithState++;
+                if(leftCell.getState()==CellState.DEAD)
+                    cellsWithState++;
+                break;
+        }
+        return cellsWithState;
     }
 }

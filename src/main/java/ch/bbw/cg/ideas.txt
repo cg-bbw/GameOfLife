@@ -5,4 +5,4 @@ Ideas for the project:
     - undead cells: If a cell was dead and changes to alive, it gets undead first.
     - viral cells: If a living cell was infected, it spreads to living neighbour cells with every tick.
     - cell structures: If specific shapes of combined living cells appear, they receive other rules. --> Very difficult. Because you have to apply another ruleset on cells inside the standard ruleset. Depending on the new ruleset, this creates difficult calculations for upcoming generations.
-
+- cell evolution: living cells can get upgrades, resistances and so on, when they are living for multiple generations.

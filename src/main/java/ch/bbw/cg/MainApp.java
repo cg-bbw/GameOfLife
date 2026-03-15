@@ -14,8 +14,8 @@ import javafx.util.Duration;
 
 public class MainApp extends Application {
 
-    private static final int COLS = 5;
-    private static final int ROWS = 5;
+    public static final int COLS = 20;
+    public static final int ROWS = 20;
 
     private static final int GENERATIONS = 25; // For unlimited animation loop use Timeline.INDEFINITE
 
@@ -23,7 +23,7 @@ public class MainApp extends Application {
     private GraphicsContext gc;
     private CellBoard board;
 
-    public static final int TILE_SIZE = 50; // pixels per tile
+    public static final int TILE_SIZE = 20; // pixels per tile
     public static final int PADDING = 20; // outer padding
 
     public static final Color GRID_COLOR = Color.LIGHTGREY; // --> alternative .web("#909090")
@@ -56,9 +56,9 @@ public class MainApp extends Application {
 
     private void play(Stage stage) {
         Timeline timeline = new Timeline(
-                new KeyFrame(Duration.millis(2000), e -> {
-                    board.calculateNextGeneration();
-                })
+            new KeyFrame(Duration.millis(2000), e -> {
+                board.calculateNextGeneration(gc);
+            })
         );
         timeline.setCycleCount(GENERATIONS);
         timeline.play();

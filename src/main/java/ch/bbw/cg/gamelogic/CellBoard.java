@@ -6,21 +6,23 @@ import javafx.scene.canvas.GraphicsContext;
 import java.util.Random;
 
 public class CellBoard {
-    private static final int COLS = 5;
-    private static final int ROWS = 5;
 
     public Cell[][] cells;
 
-    private static final int INITIAL_CHANCE_TO_LIVE = 100; // Choose a value between 0 and 100.
+    private static final int INITIAL_CHANCE_TO_LIVE = 40; // Choose a value between 0 and 100.
     private final Random rng = new Random();
 
     public CellBoard() {
-        cells = new Cell[ROWS][COLS];
+        cells = new Cell[MainApp.ROWS][MainApp.COLS];
+    }
+
+    public Cell[][] getCells() {
+        return cells;
     }
 
     public void initializeCellBoard(GraphicsContext gc) {
-        for (int row = 0; row < ROWS; row++) {
-            for (int column = 0; column < COLS; column++) {
+        for (int row = 0; row < MainApp.ROWS; row++) {
+            for (int column = 0; column < MainApp.COLS; column++) {
                 cells[row][column] = new Cell(row, column);
                 setInitialCellStateRandomly(cells[row][column], gc);
             }
@@ -28,19 +30,20 @@ public class CellBoard {
     }
 
     private void setInitialCellStateRandomly(Cell cell, GraphicsContext gc) {
+        // Set a cell to alive if the random number is less than INITIAL_CHANCE_TO_LIVE
         if(rng.nextInt(100)<INITIAL_CHANCE_TO_LIVE) {
             cell.setState(CellState.ALIVE);
         } else {
             cell.setState(CellState.DEAD);
         }
         //TODO setCellGender
-        setCellParameters(cell, gc, 0);
+        setCellParameters(cell, 0);
+        drawCell(cell, gc);
     }
 
-    // Set a cell to alive if the random number is less than INITIAL_CHANCE_TO_LIVE
-    private void setCellParameters(Cell cell, GraphicsContext gc, int generation) {
+    private void setCellParameters(Cell cell, int generation) {
         cell.setGeneration(generation);
-        drawCell(cell, gc);
+        //TODO set more parameters here
     }
 
     private void drawCell (Cell cell, GraphicsContext gc) {
@@ -59,24 +62,24 @@ public class CellBoard {
         int rowAfter;
         int columnBefore;
         int columnAfter;
-        for (int row = 0; row < ROWS; row++) {
-            for (int column = 0; column < COLS; column++) {
+        for (int row = 0; row < MainApp.ROWS; row++) {
+            for (int column = 0; column < MainApp.COLS; column++) {
                 if (row == 0) {
-                    rowBefore = ROWS - 1;
+                    rowBefore = MainApp.ROWS - 1;
                 } else {
                     rowBefore = row - 1;
                 }
                 if (column == 0) {
-                    columnBefore = COLS - 1;
+                    columnBefore = MainApp.COLS - 1;
                 } else {
                     columnBefore = column - 1;
                 }
-                if (row == ROWS - 1) {
+                if (row == MainApp.ROWS - 1) {
                     rowAfter = 0;
                 } else {
                     rowAfter = row + 1;
                 }
-                if (column == COLS - 1) {
+                if (column == MainApp.COLS - 1) {
                     columnAfter = 0;
                 } else {
                     columnAfter = column + 1;
@@ -93,12 +96,32 @@ public class CellBoard {
         }
     }
 
-    public void calculateNextGeneration() {
-        for (int row = 0; row < ROWS; row++) {
-            for (int column = 0; column < COLS; column++) {
-                GameLogic.calculateNextGeneration(this);
-                //cells[row][column].calculateNextState();
+    public void calculateNextGeneration(GraphicsContext gc) {
+        // iterate over each cell to calculate its next state, without changing current state
+        for(Cell[] row : cells) {
+            for(Cell cell : row) {
+                GameLogic.calculateCellsNextGeneration(cell);
             }
         }
+
+        // iterate over each cell to draw it and then change next state to current state and
+        // current state to previous state.
+        for(Cell[] row : cells) {
+            for(Cell cell : row) {
+                cell.setState(cell.getCalculatedNextState());
+                cell.setPreviousState(cell.getState());
+                //reset calculatedNextState
+                cell.setCalculatedNextState(null);
+                if (cell.getState() == CellState.ALIVE) {
+                    cell.setGeneration(cell.getGeneration() + 1);
+                } else if (cell.getState() == CellState.DEAD) {
+                    cell.setGeneration(0);
+                }
+                setCellParameters(cell, cell.getGeneration());
+                drawCell(cell, gc);
+            }
+        }
+
+
     }
 }
