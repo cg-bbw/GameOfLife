@@ -2,9 +2,6 @@ package ch.bbw.cg.gamelogic;
 
 import javafx.scene.paint.Color;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Cell {
 
     // Cell coordinates
@@ -15,16 +12,6 @@ public class Cell {
     private CellState state;
     private CellState previousState;
     private CellState calculatedNextState;
-
-    // Cell colors
-    // No need for the color attribute, because it is defined by the state
-    private static final Map<CellState, Color> colors = Map.of(
-            CellState.ALIVE, Color.LIGHTGREEN,
-            CellState.DEAD, Color.GREY,
-            CellState.UNDEAD, Color.DARKGREY,
-            CellState.INFECTED, Color.GREENYELLOW,
-            CellState.PREGNANT, Color.FORESTGREEN,
-            CellState.PROTECTED, Color.LIGHTBLUE);
 
     //TODO use generation as age and for a limited life span
     // generation in this case means age of the cell, because we are not
@@ -93,7 +80,7 @@ public class Cell {
     }
 
     public Color getColor(CellState state) {
-        return colors.get(state);
+        return GameSettings.colors.get(state);
     }
 
     public int getGeneration() {

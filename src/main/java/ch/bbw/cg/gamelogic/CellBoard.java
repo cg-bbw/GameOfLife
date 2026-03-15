@@ -1,6 +1,5 @@
 package ch.bbw.cg.gamelogic;
 
-import ch.bbw.cg.MainApp;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.Random;
@@ -13,7 +12,7 @@ public class CellBoard {
     private final Random rng = new Random();
 
     public CellBoard() {
-        cells = new Cell[MainApp.ROWS][MainApp.COLS];
+        cells = new Cell[GameSettings.ROWS][GameSettings.COLS];
     }
 
     public Cell[][] getCells() {
@@ -21,8 +20,8 @@ public class CellBoard {
     }
 
     public void initializeCellBoard(GraphicsContext gc) {
-        for (int row = 0; row < MainApp.ROWS; row++) {
-            for (int column = 0; column < MainApp.COLS; column++) {
+        for (int row = 0; row < GameSettings.ROWS; row++) {
+            for (int column = 0; column < GameSettings.COLS; column++) {
                 cells[row][column] = new Cell(row, column);
                 setInitialCellStateRandomly(cells[row][column], gc);
             }
@@ -47,14 +46,14 @@ public class CellBoard {
     }
 
     private void drawCell (Cell cell, GraphicsContext gc) {
-        double x = MainApp.PADDING + cell.getYPosition() * MainApp.TILE_SIZE;
-        double y = MainApp.PADDING + cell.getXPosition() * MainApp.TILE_SIZE;
+        double x = GameSettings.PADDING + cell.getYPosition() * GameSettings.TILE_SIZE;
+        double y = GameSettings.PADDING + cell.getXPosition() * GameSettings.TILE_SIZE;
 
         gc.setFill(cell.getColor(cell.getState()));
-        gc.fillRect(x, y, MainApp.TILE_SIZE, MainApp.TILE_SIZE);
+        gc.fillRect(x, y, GameSettings.TILE_SIZE, GameSettings.TILE_SIZE);
 
-        gc.setStroke(MainApp.GRID_COLOR);
-        gc.strokeRect(x, y, MainApp.TILE_SIZE, MainApp.TILE_SIZE);
+        gc.setStroke(GameSettings.GRID_COLOR);
+        gc.strokeRect(x, y, GameSettings.TILE_SIZE, GameSettings.TILE_SIZE);
     }
 
     public void defineAllCellsNeighbours() {
@@ -62,24 +61,24 @@ public class CellBoard {
         int rowAfter;
         int columnBefore;
         int columnAfter;
-        for (int row = 0; row < MainApp.ROWS; row++) {
-            for (int column = 0; column < MainApp.COLS; column++) {
+        for (int row = 0; row < GameSettings.ROWS; row++) {
+            for (int column = 0; column < GameSettings.COLS; column++) {
                 if (row == 0) {
-                    rowBefore = MainApp.ROWS - 1;
+                    rowBefore = GameSettings.ROWS - 1;
                 } else {
                     rowBefore = row - 1;
                 }
                 if (column == 0) {
-                    columnBefore = MainApp.COLS - 1;
+                    columnBefore = GameSettings.COLS - 1;
                 } else {
                     columnBefore = column - 1;
                 }
-                if (row == MainApp.ROWS - 1) {
+                if (row == GameSettings.ROWS - 1) {
                     rowAfter = 0;
                 } else {
                     rowAfter = row + 1;
                 }
-                if (column == MainApp.COLS - 1) {
+                if (column == GameSettings.COLS - 1) {
                     columnAfter = 0;
                 } else {
                     columnAfter = column + 1;
