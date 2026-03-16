@@ -30,6 +30,34 @@ public class GameSettings {
 
     // TODO public static final int MAX_CELL_AGE = 100;
 
+    /**
+     * Active rules: First int stands for rule, second int stands for activeness
+     *
+     * Rules:
+     * 0 = Alive-Alive
+     * 1 = Alive-Dead
+     * 2 = Alive-Undead
+     * 3 = Alive-Immortal
+     * 4 = Dead-Alive
+     * 5 = Dead-Dead
+     * 6 = Dead-Undead
+     * 7 = Dead-Immortal
+     * 8 = Undead-Alive
+     * 9 = Undead-Dead
+     * 10 = Undead-Undead
+     * 11 = Undead-Immortal
+     * 12 = Immortal-Alive
+     * 13 = Immortal-Dead
+     * 14 = Immortal-Undead
+     * 15 = Immortal-Immortal
+     *
+     * Activeness:
+     * 0 = inactive
+     * 1 = active
+     */
+    public static final int[][] activeRules = {
+            {0,1}, {1,1}, {2,1}, };
+
     public static Map<Rule.RuleType, Boolean> appliedRules = Map.of(
             Rule.RuleType.ALIVE_DEAD, true,
             Rule.RuleType.ALIVE_UNDEAD, true,
