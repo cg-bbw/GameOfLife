@@ -108,13 +108,17 @@ public class CellBoard {
         // the current state and the current state to the previous state.
         for(Cell[] row : cells) {
             for(Cell cell : row) {
-                cell.setState(cell.getCalculatedNextState());
+                // setting previousState before changing state is very important.
                 cell.setPreviousState(cell.getState());
+                cell.setState(cell.getCalculatedNextState());
                 //reset calculatedNextState
                 cell.setCalculatedNextState(null);
-                if (cell.getState() == CellState.ALIVE) {
+                if (cell.getState() == cell.getPreviousState()) {
                     cell.setGeneration(cell.getGeneration() + 1);
-                } else if (cell.getState() == CellState.DEAD) {
+                } else if ((cell.getState() == CellState.ALIVE && cell.getPreviousState() != CellState.ALIVE) ||
+                        (cell.getState() == CellState.UNDEAD && cell.getPreviousState() != CellState.UNDEAD) ||
+                        cell.getState() == CellState.DEAD ||
+                        cell.getState() != cell.getPreviousState()) {
                     cell.setGeneration(0);
                 }
                 setCellParameters(cell, cell.getGeneration());

@@ -47,7 +47,7 @@ public class MainApp extends Application {
 
     private void play(Stage stage) {
         Timeline timeline = new Timeline(
-            new KeyFrame(Duration.millis(2000), e -> {
+            new KeyFrame(Duration.millis(GameSettings.RENDER_SPEED), e -> {
                 board.calculateNextGeneration(gc);
             })
         );

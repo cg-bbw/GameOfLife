@@ -37,15 +37,20 @@ public class GameLogic {
         int deadRulesForLivingCells = 1;
         int undeadRulesForLivingCells = 2;
         int immortalRulesForLivingCells = 3;
+
+        // Living cells die after MAX_ALIVE_AGE generations.
+        if (cell.getGeneration() == GameSettings.MAX_ALIVE_AGE) {
+            cell.setCalculatedNextState(CellState.DEAD);
+            return;
+        }
+
+        //
         if(Arrays.stream(GameSettings.activeRules).anyMatch(n -> aliveRulesForLivingCells == n)) {
             lessThanXNeighboursOfState(cell, 2, livingNeighbours, CellState.DEAD);
             moreThanXNeighboursOfState(cell, 4, livingNeighbours, CellState.DEAD);
         }
         if(Arrays.stream(GameSettings.activeRules).anyMatch(n -> deadRulesForLivingCells == n)) {
             // TODO implement dead rules for living cells
-        }
-        if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> undeadRulesForLivingCells == n)) {
-            moreThanXNeighboursOfState(cell, 3, undeadNeighbours, CellState.UNDEAD);
         }
         if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> immortalRulesForLivingCells == n)) {
             moreThanXNeighboursOfState(cell, 7, livingNeighbours, CellState.IMMORTAL);
@@ -62,6 +67,12 @@ public class GameLogic {
         if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> undeadRulesForDeadCells == n)) {
             betweenXAndYNeighboursOfState(cell, 2, 4, livingNeighbours, CellState.UNDEAD);
         }
+
+        // Specific arrangement of living cells around a dead cell will turn it into a living cell.
+        if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> aliveRulesForDeadCells == n)) {
+            allEdgeNeighboursOfState(cell, CellState.ALIVE, CellState.ALIVE);
+            allCornerNeighboursOfState(cell, CellState.ALIVE, CellState.ALIVE);
+        }
     }
 
     private static void applyRulesForUndeadCell(Cell cell, int livingNeighbours, int deadNeighbours, int undeadNeighbours, int immortalNeighbours) {
@@ -70,12 +81,18 @@ public class GameLogic {
         int undeadRulesForUndeadCells = 10;
         int immortalRulesForUndeadCells = 11;
 
-        // Only dead cells around will kill an undead cell.
-        if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> deadRulesForUndeadCells == n)) {
-            moreThanXNeighboursOfState(cell, 6, deadNeighbours, CellState.DEAD);
+        // Undead cells die after MAX_UNDEAD_AGE generations.
+        if (cell.getGeneration() == GameSettings.MAX_UNDEAD_AGE) {
+            cell.setCalculatedNextState(CellState.DEAD);
+            return;
         }
 
-        // Enough living cells around an undead cell brings it back to life.
+        // Only dead cells around will kill an undead cell.
+        if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> deadRulesForUndeadCells == n)) {
+            moreThanXNeighboursOfState(cell, 7, deadNeighbours, CellState.DEAD);
+        }
+
+        // Enough living cells around an undead cell bring it back to life.
         if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> aliveRulesForUndeadCells == n)) {
             moreThanXNeighboursOfState(cell, 4, livingNeighbours, CellState.ALIVE);
         }
@@ -87,12 +104,11 @@ public class GameLogic {
     }
 
     private static void applyRulesForImmortalCell(Cell cell, int livingNeighbours, int deadNeighbours, int undeadNeighbours, int immortalNeighbours) {
+        int aliveRulesForImmortalCells = 12;
+        int deadRulesForImmortalCells = 13;
         int undeadRulesForImmortalCells = 14;
         int immortalRulesForImmortalCells = 15;
         if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> undeadRulesForImmortalCells == n)) {
-            allEdgeNeighboursOfState(cell, CellState.UNDEAD, CellState.UNDEAD);
-        }
-        if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> immortalRulesForImmortalCells == n)) {
             allEdgeNeighboursOfState(cell, CellState.UNDEAD, CellState.UNDEAD);
         }
     }

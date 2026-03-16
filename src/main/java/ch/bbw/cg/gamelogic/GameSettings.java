@@ -5,13 +5,14 @@ import javafx.scene.paint.Color;
 import java.util.Map;
 
 public class GameSettings {
-    public static final int COLS = 20;
-    public static final int ROWS = 20;
+    public static final int COLS = 30;
+    public static final int ROWS = 30;
 
     public static final int TILE_SIZE = 20; // pixels per tile
     public static final int PADDING = 20; // outer padding
 
-    public static final int GENERATIONS = 25; // For unlimited animation loop use Timeline.INDEFINITE
+    public static final int GENERATIONS = 100; // For unlimited animation loop use Timeline.INDEFINITE
+    public static final int RENDER_SPEED = 1000; //value in milliseconds
 
     public static final Color GRID_COLOR = Color.LIGHTGREY; // --> alternative .web("#909090")
 
@@ -20,15 +21,16 @@ public class GameSettings {
     public static final Map<CellState, Color> colors = Map.of(
             CellState.ALIVE, Color.LIGHTGREEN,
             CellState.DEAD, Color.GREY,
-            CellState.UNDEAD, Color.DARKGREY,
+            CellState.UNDEAD, Color.PURPLE,
             CellState.INFECTED, Color.GREENYELLOW,
             CellState.PREGNANT, Color.FORESTGREEN,
             CellState.PROTECTED, Color.LIGHTBLUE,
-            CellState.IMMORTAL, Color.DARKBLUE);
+            CellState.IMMORTAL, Color.WHITE);
 
-    public static final int INITIAL_CHANCE_TO_LIVE = 40;
+    public static final int INITIAL_CHANCE_TO_LIVE = 60;
 
-    // TODO public static final int MAX_CELL_AGE = 100;
+    public static final int MAX_ALIVE_AGE = 10;
+    public static final int MAX_UNDEAD_AGE = 5;
 
     /**
      * Active rules: If the following numbers appear in the array,
