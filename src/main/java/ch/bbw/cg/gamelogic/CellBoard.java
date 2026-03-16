@@ -104,8 +104,8 @@ public class CellBoard {
             }
         }
 
-        // iterate over each cell to draw it and then change next state to current state and
-        // current state to previous state.
+        // iterate over each cell to draw it and then change the next state to
+        // the current state and the current state to the previous state.
         for(Cell[] row : cells) {
             for(Cell cell : row) {
                 cell.setState(cell.getCalculatedNextState());

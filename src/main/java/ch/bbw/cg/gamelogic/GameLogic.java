@@ -1,18 +1,20 @@
 package ch.bbw.cg.gamelogic;
 
+import java.util.Arrays;
+
 public class GameLogic {
     public static void calculateCellsNextGeneration(Cell cell) {
         //TODO implement special rules here
         int livingNeighbours = cell.amountOfNeighboursWithState(CellState.ALIVE);
         int deadNeighbours = cell.amountOfNeighboursWithState(CellState.DEAD);
         int undeadNeighbours = cell.amountOfNeighboursWithState(CellState.UNDEAD);
-        int infectedNeighbours = cell.amountOfNeighboursWithState(CellState.INFECTED);
-        int pregnantNeighbours = cell.amountOfNeighboursWithState(CellState.PREGNANT);
-        int protectedNeighbours = cell.amountOfNeighboursWithState(CellState.PROTECTED);
+//        int infectedNeighbours = cell.amountOfNeighboursWithState(CellState.INFECTED);
+//        int pregnantNeighbours = cell.amountOfNeighboursWithState(CellState.PREGNANT);
+//        int protectedNeighbours = cell.amountOfNeighboursWithState(CellState.PROTECTED);
         int immortalNeighbours = cell.amountOfNeighboursWithState(CellState.IMMORTAL);
 
-
-        //TODO implement Rule objects that can be switched on and off.
+        // inside each of these rules for a specific cell state,
+        // the priority is: latter over former.
         if(cell.getState() == CellState.ALIVE) {
             applyRulesForLivingCell(cell, livingNeighbours, deadNeighbours, undeadNeighbours, immortalNeighbours);
         } else if(cell.getState() == CellState.DEAD) {
@@ -23,60 +25,114 @@ public class GameLogic {
             applyRulesForImmortalCell(cell, livingNeighbours, deadNeighbours, undeadNeighbours, immortalNeighbours);
         }
 
-        //no rule has applied, therefore the next state stays the same.
+        //no rule has applied, therefore, the next state stays the same.
         if(cell.getCalculatedNextState() == null) {
             cell.setCalculatedNextState(cell.getState());
         }
     }
 
     private static void applyRulesForLivingCell(Cell cell, int livingNeighbours, int deadNeighbours, int undeadNeighbours, int immortalNeighbours) {
-        if(GameSettings.appliedRules.get(Rule.RuleType.ALIVE_DEAD)) {
-            lessThanTwoLivingNeighbours(cell, livingNeighbours);
-//            twoOrThreeLivingNeighbours(cell, livingNeighbours);
-            moreThanThreeLivingNeighbours(cell, livingNeighbours);
+        //FIXME don't like it, that the rules are hardcoded here, only for comparison with array.
+        int aliveRulesForLivingCells = 0;
+        int deadRulesForLivingCells = 1;
+        int undeadRulesForLivingCells = 2;
+        int immortalRulesForLivingCells = 3;
+        if(Arrays.stream(GameSettings.activeRules).anyMatch(n -> aliveRulesForLivingCells == n)) {
+            lessThanXNeighboursOfState(cell, 2, livingNeighbours, CellState.DEAD);
+            moreThanXNeighboursOfState(cell, 4, livingNeighbours, CellState.DEAD);
         }
-        if(GameSettings.appliedRules.get(Rule.RuleType.ALIVE_IMMORTAL)) {
-            onlyLivingNeighbours(cell, livingNeighbours);
+        if(Arrays.stream(GameSettings.activeRules).anyMatch(n -> deadRulesForLivingCells == n)) {
+            // TODO implement dead rules for living cells
         }
-        //TODO more interesting rules for living cells
-    }
-
-    //Any live cell with fewer than two live neighbours dies, as if by underpopulation.
-    private static void lessThanTwoLivingNeighbours(Cell cell, int livingNeighbours){
-        if(livingNeighbours < 2) {
-            cell.setCalculatedNextState(CellState.DEAD);
+        if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> undeadRulesForLivingCells == n)) {
+            moreThanXNeighboursOfState(cell, 3, undeadNeighbours, CellState.UNDEAD);
         }
-    }
-
-//    //Any live cell with two or three live neighbours lives on to the next generation.
-//    private static void twoOrThreeLivingNeighbours(Cell cell, int livingNeighbours){
-//        if(livingNeighbours >= 2 && livingNeighbours <= 3) {
-//            cell.setCalculatedNextState(CellState.ALIVE);
-//        }
-//    }
-
-    //Any live cell with more than three live neighbours dies, as if by overpopulation.
-    private static void moreThanThreeLivingNeighbours(Cell cell, int livingNeighbours){
-        if(livingNeighbours > 3) {
-            cell.setCalculatedNextState(CellState.DEAD);
-        }
-    }
-
-    private static void onlyLivingNeighbours(Cell cell, int livingNeighbours){
-        if(livingNeighbours == 8) {
-            cell.setCalculatedNextState(CellState.IMMORTAL);
+        if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> immortalRulesForLivingCells == n)) {
+            moreThanXNeighboursOfState(cell, 7, livingNeighbours, CellState.IMMORTAL);
         }
     }
 
     private static void applyRulesForDeadCell(Cell cell, int livingNeighbours, int deadNeighbours, int undeadNeighbours, int immortalNeighbours) {
-        threeLivingNeighbours(cell, livingNeighbours);
-        //TODO more interesting rules for dead cells
+        int aliveRulesForDeadCells = 4;
+        int deadRulesForDeadCells = 5;
+        int undeadRulesForDeadCells = 6;
+        int immortalRulesForDeadCells = 7;
+
+        // Enough living cells around dead cells deliver enough nutrition to turn them into undead cells.
+        if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> undeadRulesForDeadCells == n)) {
+            betweenXAndYNeighboursOfState(cell, 2, 4, livingNeighbours, CellState.UNDEAD);
+        }
+    }
+
+    private static void applyRulesForUndeadCell(Cell cell, int livingNeighbours, int deadNeighbours, int undeadNeighbours, int immortalNeighbours) {
+        int aliveRulesForUndeadCells = 8;
+        int deadRulesForUndeadCells = 9;
+        int undeadRulesForUndeadCells = 10;
+        int immortalRulesForUndeadCells = 11;
+
+        // Only dead cells around will kill an undead cell.
+        if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> deadRulesForUndeadCells == n)) {
+            moreThanXNeighboursOfState(cell, 6, deadNeighbours, CellState.DEAD);
+        }
+
+        // Enough living cells around an undead cell brings it back to life.
+        if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> aliveRulesForUndeadCells == n)) {
+            moreThanXNeighboursOfState(cell, 4, livingNeighbours, CellState.ALIVE);
+        }
+
+        // Immortals can bring undead cells back to life.
+        if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> immortalRulesForUndeadCells == n)) {
+            moreThanXNeighboursOfState(cell, 1, immortalNeighbours, CellState.ALIVE);
+        }
+    }
+
+    private static void applyRulesForImmortalCell(Cell cell, int livingNeighbours, int deadNeighbours, int undeadNeighbours, int immortalNeighbours) {
+        int undeadRulesForImmortalCells = 14;
+        int immortalRulesForImmortalCells = 15;
+        if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> undeadRulesForImmortalCells == n)) {
+            allEdgeNeighboursOfState(cell, CellState.UNDEAD, CellState.UNDEAD);
+        }
+        if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> immortalRulesForImmortalCells == n)) {
+            allEdgeNeighboursOfState(cell, CellState.UNDEAD, CellState.UNDEAD);
+        }
+    }
+
+    // generic rule for cell with less than x neighbours of a specific state
+    private static void lessThanXNeighboursOfState(Cell cell, int x, int neighboursOfState, CellState nextState){
+        if(neighboursOfState < x) {
+            cell.setCalculatedNextState(nextState);
+        }
+    }
+
+    // generic rule for cell with more than x neighbours of a specific state
+    private static void moreThanXNeighboursOfState(Cell cell, int x, int neighboursOfState, CellState nextState){
+        if(neighboursOfState > x) {
+            cell.setCalculatedNextState(nextState);
+        }
     }
 
     //Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
-    private static void threeLivingNeighbours(Cell cell, int livingNeighbours) {
-        if(livingNeighbours == 3) {
-            cell.setCalculatedNextState(CellState.ALIVE);
+    private static void betweenXAndYNeighboursOfState(Cell cell, int x, int y, int neighboursOfState, CellState nextState) {
+        if(neighboursOfState >= x && neighboursOfState <= y) {
+            cell.setCalculatedNextState(nextState);
+        }
+    }
+
+    private static void allEdgeNeighboursOfState(Cell cell, CellState neighboursOfState, CellState nextState) {
+        if(cell.getTopNeighbour().getState()==neighboursOfState &&
+                cell.getRightNeighbour().getState()==neighboursOfState &&
+                cell.getBottomNeighbour().getState()==neighboursOfState &&
+                cell.getLeftNeighbour().getState()==neighboursOfState) {
+            cell.setCalculatedNextState(nextState);
+        }
+    }
+
+    private static void allCornerNeighboursOfState(Cell cell, CellState neighboursOfState, CellState nextState) {
+        if(cell.getTopLeftNeighbour().getState()==neighboursOfState &&
+                cell.getTopRightNeighbour().getState()==neighboursOfState &&
+                cell.getBottomRightNeighbour().getState()==neighboursOfState &&
+                cell.getBottomLeftNeighbour().getState()==neighboursOfState) {
+            cell.setCalculatedNextState(nextState);
         }
     }
 

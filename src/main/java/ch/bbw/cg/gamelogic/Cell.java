@@ -91,32 +91,64 @@ public class Cell {
         this.generation = generation;
     }
 
+    public Cell getTopLeftNeighbour() {
+        return this.topLeftCell;
+    }
+
     public void defineTopLeftNeighbour(Cell cell) {
         this.topLeftCell = cell;
+    }
+
+    public Cell getTopNeighbour() {
+        return this.topCell;
     }
 
     public void defineTopNeighbour(Cell cell) {
         this.topCell = cell;
     }
 
+    public Cell getTopRightNeighbour() {
+        return this.topRightCell;
+    }
+
     public void defineTopRightNeighbour(Cell cell) {
         this.topRightCell = cell;
+    }
+
+    public Cell getRightNeighbour() {
+        return this.rightCell;
     }
 
     public void defineRightNeighbour(Cell cell) {
         this.rightCell = cell;
     }
 
+    public Cell getBottomRightNeighbour() {
+        return this.bottomRightCell;
+    }
+
     public void defineBottomRightNeighbour(Cell cell) {
         this.bottomRightCell = cell;
+    }
+
+    public Cell getBottomNeighbour() {
+        return this.bottomCell;
     }
 
     public void defineBottomNeighbour(Cell cell) {
         this.bottomCell = cell;
     }
 
+    public Cell getBottomLeftNeighbour() {
+        return this.bottomLeftCell;
+    }
+
     public void defineBottomLeftNeighbour(Cell cell) {
         this.bottomLeftCell = cell;
+    }
+
+    public Cell getLeftNeighbour() {
+        return this.leftCell;
     }
 
     public void defineLeftNeighbour(Cell cell) {
@@ -164,6 +196,40 @@ public class Cell {
                 if(leftCell.getState()==CellState.DEAD)
                     cellsWithState++;
                 break;
+            case UNDEAD:
+                if(topLeftCell.getState()==CellState.UNDEAD)
+                    cellsWithState++;
+                if(topCell.getState()==CellState.UNDEAD)
+                    cellsWithState++;
+                if(topRightCell.getState()==CellState.UNDEAD)
+                    cellsWithState++;
+                if(rightCell.getState()==CellState.UNDEAD)
+                    cellsWithState++;
+                if(bottomRightCell.getState()==CellState.UNDEAD)
+                    cellsWithState++;
+                if(bottomCell.getState()==CellState.UNDEAD)
+                    cellsWithState++;
+                if(bottomLeftCell.getState()==CellState.UNDEAD)
+                    cellsWithState++;
+                if(leftCell.getState()==CellState.UNDEAD)
+                    cellsWithState++;
+            case IMMORTAL:
+                if(topLeftCell.getState()==CellState.IMMORTAL)
+                    cellsWithState++;
+                if(topCell.getState()==CellState.IMMORTAL)
+                    cellsWithState++;
+                if(topRightCell.getState()==CellState.IMMORTAL)
+                    cellsWithState++;
+                if(rightCell.getState()==CellState.IMMORTAL)
+                    cellsWithState++;
+                if(bottomRightCell.getState()==CellState.IMMORTAL)
+                    cellsWithState++;
+                if(bottomCell.getState()==CellState.IMMORTAL)
+                    cellsWithState++;
+                if(bottomLeftCell.getState()==CellState.IMMORTAL)
+                    cellsWithState++;
+                if(leftCell.getState()==CellState.IMMORTAL)
+                    cellsWithState++;
         }
         return cellsWithState;
     }
