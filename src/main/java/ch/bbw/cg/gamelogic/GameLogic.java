@@ -1,6 +1,7 @@
 package ch.bbw.cg.gamelogic;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class GameLogic {
     public static void calculateCellsNextGeneration(Cell cell) {
@@ -38,8 +39,9 @@ public class GameLogic {
         int undeadRulesForLivingCells = 2;
         int immortalRulesForLivingCells = 3;
 
-        // Living cells die after MAX_ALIVE_AGE generations.
-        if (cell.getGeneration() == GameSettings.MAX_ALIVE_AGE) {
+        // Living cells die after some generations depending on their age and a random factor.
+        if (cell.getGeneration() > new Random().nextInt(GameSettings.MAX_ALIVE_AGE) +
+                (GameSettings.MAX_ALIVE_AGE-cell.getGeneration())) {
             cell.setCalculatedNextState(CellState.DEAD);
             return;
         }
@@ -81,8 +83,9 @@ public class GameLogic {
         int undeadRulesForUndeadCells = 10;
         int immortalRulesForUndeadCells = 11;
 
-        // Undead cells die after MAX_UNDEAD_AGE generations.
-        if (cell.getGeneration() == GameSettings.MAX_UNDEAD_AGE) {
+        // Undead cells die after some generations depending on their age and a random factor.
+        if (cell.getGeneration() > new Random().nextInt(GameSettings.MAX_UNDEAD_AGE) +
+                (GameSettings.MAX_UNDEAD_AGE-cell.getGeneration())) {
             cell.setCalculatedNextState(CellState.DEAD);
             return;
         }
