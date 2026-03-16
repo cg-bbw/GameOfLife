@@ -8,7 +8,6 @@ public class CellBoard {
 
     public Cell[][] cells;
 
-    private static final int INITIAL_CHANCE_TO_LIVE = 40; // Choose a value between 0 and 100.
     private final Random rng = new Random();
 
     public CellBoard() {
@@ -28,9 +27,11 @@ public class CellBoard {
         }
     }
 
+    // TODO: implement a mode, where the user can define manually the initial state of the cells.
+    //  Give him an interface with color description, introduction how to set the state and an apply button.
     private void setInitialCellStateRandomly(Cell cell, GraphicsContext gc) {
         // Set a cell to alive if the random number is less than INITIAL_CHANCE_TO_LIVE
-        if(rng.nextInt(100)<INITIAL_CHANCE_TO_LIVE) {
+        if(rng.nextInt(100)<GameSettings.INITIAL_CHANCE_TO_LIVE) {
             cell.setState(CellState.ALIVE);
         } else {
             cell.setState(CellState.DEAD);

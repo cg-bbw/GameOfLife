@@ -23,5 +23,55 @@ public class GameSettings {
             CellState.UNDEAD, Color.DARKGREY,
             CellState.INFECTED, Color.GREENYELLOW,
             CellState.PREGNANT, Color.FORESTGREEN,
-            CellState.PROTECTED, Color.LIGHTBLUE);
+            CellState.PROTECTED, Color.LIGHTBLUE,
+            CellState.IMMORTAL, Color.DARKBLUE);
+
+    public static final int INITIAL_CHANCE_TO_LIVE = 40;
+
+    // TODO public static final int MAX_CELL_AGE = 100;
+
+    public static Map<Rule.RuleType, Boolean> appliedRules = Map.of(
+            Rule.RuleType.ALIVE_DEAD, true,
+            Rule.RuleType.ALIVE_UNDEAD, true,
+            Rule.RuleType.ALIVE_INFECTED, false,
+            Rule.RuleType.ALIVE_PREGNANT, false,
+            Rule.RuleType.ALIVE_PROTECTED, false,
+            Rule.RuleType.ALIVE_IMMORTAL, true,
+            Rule.RuleType.DEAD_ALIVE, true,
+            Rule.RuleType.DEAD_UNDEAD, true,
+            Rule.RuleType.DEAD_INFECTED, false,
+            Rule.RuleType.DEAD_PREGNANT, false,
+            Rule.RuleType.DEAD_PROTECTED, false,
+            Rule.RuleType.DEAD_IMMORTAL, true,
+            Rule.RuleType.UNDEAD_ALIVE, true,
+            Rule.RuleType.UNDEAD_DEAD, true,
+            Rule.RuleType.UNDEAD_INFECTED, false,
+            Rule.RuleType.UNDEAD_PREGNANT, false,
+            Rule.RuleType.UNDEAD_PROTECTED, false,
+            Rule.RuleType.UNDEAD_IMMORTAL, true,
+            Rule.RuleType.INFECTED_ALIVE, false,
+            Rule.RuleType.INFECTED_DEAD, false,
+            Rule.RuleType.INFECTED_UNDEAD, false,
+            Rule.RuleType.INFECTED_PREGNANT, false,
+            Rule.RuleType.INFECTED_PROTECTED, false,
+            Rule.RuleType.INFECTED_IMMORTAL, false,
+            Rule.RuleType.PREGNANT_ALIVE, false,
+            Rule.RuleType.PREGNANT_DEAD, false,
+            Rule.RuleType.PREGNANT_UNDEAD, false,
+            Rule.RuleType.PREGNANT_INFECTED, false,
+            Rule.RuleType.PREGNANT_PROTECTED, false,
+            Rule.RuleType.PREGNANT_IMMORTAL, false,
+            Rule.RuleType.PROTECTED_ALIVE, false,
+            Rule.RuleType.PROTECTED_DEAD, false,
+            Rule.RuleType.PROTECTED_UNDEAD, false,
+            Rule.RuleType.PROTECTED_INFECTED, false,
+            Rule.RuleType.PROTECTED_PREGNANT, false,
+            Rule.RuleType.PROTECTED_IMMORTAL, false,
+            Rule.RuleType.IMMORTAL_ALIVE, true,
+            Rule.RuleType.IMMORTAL_DEAD, true,
+            Rule.RuleType.IMMORTAL_UNDEAD, true,
+            Rule.RuleType.IMMORTAL_INFECTED, false,
+            Rule.RuleType.IMMORTAL_PREGNANT, false,
+            Rule.RuleType.IMMORTAL_PROTECTED, false
+    );
 }

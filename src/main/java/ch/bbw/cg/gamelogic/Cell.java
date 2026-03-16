@@ -124,6 +124,8 @@ public class Cell {
     }
 
     public int amountOfNeighboursWithState(CellState state) {
+        //FIXME probably better to use a map with state and int value for amount of neighbours
+        // and call the method only once. But maybe it will be less readable
         int cellsWithState = 0;
         switch (state) {
             case ALIVE:

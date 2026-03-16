@@ -1,5 +1,5 @@
 package ch.bbw.cg.gamelogic;
 
 public enum CellState {
-    ALIVE, DEAD, UNDEAD, INFECTED, PREGNANT, PROTECTED;
+    ALIVE, DEAD, UNDEAD, INFECTED, PREGNANT, PROTECTED, IMMORTAL;
 }

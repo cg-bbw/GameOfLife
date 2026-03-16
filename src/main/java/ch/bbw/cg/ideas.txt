@@ -1,5 +1,6 @@
 Ideas for the project:
-- Settings for the game. Like preset for the initial living cells.
+- Settings for the game. Important and global values that define the canvas and cells.
+    --> done
 - additional rules:
     - eternal cells: If all neighbours are alive, the cell will stay alive forever.
     - undead cells: If a cell was dead and changes to alive, it gets undead first.
