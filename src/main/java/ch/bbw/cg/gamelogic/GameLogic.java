@@ -46,7 +46,7 @@ public class GameLogic {
             return;
         }
 
-        //
+        // Too many or too few living neighbours can kill a living cell.
         if(Arrays.stream(GameSettings.activeRules).anyMatch(n -> aliveRulesForLivingCells == n)) {
             lessThanXNeighboursOfState(cell, 2, livingNeighbours, CellState.DEAD);
             moreThanXNeighboursOfState(cell, 4, livingNeighbours, CellState.DEAD);
@@ -64,6 +64,12 @@ public class GameLogic {
         int deadRulesForDeadCells = 5;
         int undeadRulesForDeadCells = 6;
         int immortalRulesForDeadCells = 7;
+
+        // Randomly revive dead cells
+        if (new Random().nextInt(100)+1 <= GameSettings.REVIVE_CHANCE){
+            cell.setCalculatedNextState(CellState.ALIVE);
+            return;
+        }
 
         // Enough living cells around dead cells deliver enough nutrition to turn them into undead cells.
         if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> undeadRulesForDeadCells == n)) {

@@ -27,10 +27,14 @@ public class GameSettings {
             CellState.PROTECTED, Color.LIGHTBLUE,
             CellState.IMMORTAL, Color.WHITE);
 
-    public static final int INITIAL_CHANCE_TO_LIVE = 60;
+    public static final int INITIAL_CHANCE_TO_LIVE = 20;
+    public static final int REVIVE_CHANCE = 1;
+    //TODO public static final int SURVIVING_CHANCE = 20;
 
     public static final int MAX_ALIVE_AGE = 10;
     public static final int MAX_UNDEAD_AGE = 5;
+
+    //TODO implement a setting choice from the user. The numbers in the array should be added by choice.
 
     /**
      * Active rules: If the following numbers appear in the array,
@@ -53,13 +57,17 @@ public class GameSettings {
      * 13 = Immortal-Dead
      * 14 = Immortal-Undead
      * 15 = Immortal-Immortal
-     *
-     *
-     * Example:
-     * {3,1} = {Alive-Immortal, true} --> the immortal rules for living cells are active
-     * {9,0} = {Undead-Dead, false} --> the dead rules for undead cells are inactive
      */
     public static final int[] activeRules = {
-            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+            0, 1, 2, 3,
+            4, 5, 6, 7,
+            8, 9, 10, 11,
+            12, 13, 14, 15
     };
+
+    // active rules with only living and dead rules
+//    public static final int[] activeRules = {
+//            0, 1,
+//            4, 5
+//    };
 }
