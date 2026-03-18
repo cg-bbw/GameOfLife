@@ -27,47 +27,46 @@ public class GameSettings {
             CellState.PROTECTED, Color.LIGHTBLUE,
             CellState.IMMORTAL, Color.WHITE);
 
-    public static final int INITIAL_CHANCE_TO_LIVE = 20;
+    public static final int INITIAL_CHANCE_TO_LIVE = 90;
     public static final int REVIVE_CHANCE = 1;
     //TODO public static final int SURVIVING_CHANCE = 20;
 
     public static final int MAX_ALIVE_AGE = 10;
     public static final int MAX_UNDEAD_AGE = 5;
 
-    //TODO implement a setting choice from the user. The numbers in the array should be added by choice.
+    // FIXME Not sure yet if the ruleNumber is actually needed.
+    public enum activeRuleEnum {
+        ALIVE_ALIVE(0, true),
+        ALIVE_DEAD(1,true),
+        ALIVE_UNDEAD(2,true),
+        ALIVE_IMMORTAL(3,true),
+        DEAD_ALIVE(4,true),
+        DEAD_DEAD(5,true),
+        DEAD_UNDEAD(6,true),
+        DEAD_IMMORTAL(7,true),
+        UNDEAD_ALIVE(8,true),
+        UNDEAD_DEAD(9,true),
+        UNDEAD_UNDEAD(10,true),
+        UNDEAD_IMMORTAL(11,true),
+        IMMORTAL_ALIVE(12,true),
+        IMMORTAL_DEAD(13,true),
+        IMMORTAL_UNDEAD(14,true),
+        IMMORTAL_IMMORTAL(15,true);
 
-    /**
-     * Active rules: If the following numbers appear in the array,
-     * the corresponding rules are active.
-     *
-     * Rules:
-     * 0 = Alive-Alive
-     * 1 = Alive-Dead
-     * 2 = Alive-Undead
-     * 3 = Alive-Immortal
-     * 4 = Dead-Alive
-     * 5 = Dead-Dead
-     * 6 = Dead-Undead
-     * 7 = Dead-Immortal
-     * 8 = Undead-Alive
-     * 9 = Undead-Dead
-     * 10 = Undead-Undead
-     * 11 = Undead-Immortal
-     * 12 = Immortal-Alive
-     * 13 = Immortal-Dead
-     * 14 = Immortal-Undead
-     * 15 = Immortal-Immortal
-     */
-    public static final int[] activeRules = {
-            0, 1, 2, 3,
-            4, 5, 6, 7,
-            8, 9, 10, 11,
-            12, 13, 14, 15
-    };
+        private final int ruleNumber;
+        private final boolean active;
 
-    // active rules with only living and dead rules
-//    public static final int[] activeRules = {
-//            0, 1,
-//            4, 5
-//    };
+        activeRuleEnum(int ruleNumber, boolean active) {
+            this.ruleNumber = ruleNumber;
+            this.active = active;
+        }
+
+        public int getRuleNumber() {
+            return ruleNumber;
+        }
+
+        public boolean isActive() {
+            return active;
+        }
+    }
 }

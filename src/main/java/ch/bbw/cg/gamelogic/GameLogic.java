@@ -33,38 +33,26 @@ public class GameLogic {
     }
 
     private static void applyRulesForLivingCell(Cell cell, int livingNeighbours, int deadNeighbours, int undeadNeighbours, int immortalNeighbours) {
-        //FIXME don't like it, that the rules are hardcoded here, only for comparison with array.
-        int aliveRulesForLivingCells = 0;
-        int deadRulesForLivingCells = 1;
-        int undeadRulesForLivingCells = 2;
-        int immortalRulesForLivingCells = 3;
-
         // Living cells die after some generations depending on their age and a random factor.
         if (cell.getGeneration() > new Random().nextInt(GameSettings.MAX_ALIVE_AGE) +
                 (GameSettings.MAX_ALIVE_AGE-cell.getGeneration())) {
             cell.setCalculatedNextState(CellState.DEAD);
             return;
         }
-
         // Too many or too few living neighbours can kill a living cell.
-        if(Arrays.stream(GameSettings.activeRules).anyMatch(n -> aliveRulesForLivingCells == n)) {
+        if(GameSettings.activeRuleEnum.ALIVE_ALIVE.isActive()) {
             lessThanXNeighboursOfState(cell, 2, livingNeighbours, CellState.DEAD);
             moreThanXNeighboursOfState(cell, 4, livingNeighbours, CellState.DEAD);
         }
-        if(Arrays.stream(GameSettings.activeRules).anyMatch(n -> deadRulesForLivingCells == n)) {
+        if(GameSettings.activeRuleEnum.ALIVE_DEAD.isActive()) {
             // TODO implement dead rules for living cells
         }
-        if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> immortalRulesForLivingCells == n)) {
+        if (GameSettings.activeRuleEnum.ALIVE_IMMORTAL.isActive()) {
             moreThanXNeighboursOfState(cell, 7, livingNeighbours, CellState.IMMORTAL);
         }
     }
 
     private static void applyRulesForDeadCell(Cell cell, int livingNeighbours, int deadNeighbours, int undeadNeighbours, int immortalNeighbours) {
-        int aliveRulesForDeadCells = 4;
-        int deadRulesForDeadCells = 5;
-        int undeadRulesForDeadCells = 6;
-        int immortalRulesForDeadCells = 7;
-
         // Randomly revive dead cells
         if (new Random().nextInt(100)+1 <= GameSettings.REVIVE_CHANCE){
             cell.setCalculatedNextState(CellState.ALIVE);
@@ -72,23 +60,18 @@ public class GameLogic {
         }
 
         // Enough living cells around dead cells deliver enough nutrition to turn them into undead cells.
-        if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> undeadRulesForDeadCells == n)) {
+        if (GameSettings.activeRuleEnum.DEAD_UNDEAD.isActive()) {
             betweenXAndYNeighboursOfState(cell, 2, 4, livingNeighbours, CellState.UNDEAD);
         }
 
         // Specific arrangement of living cells around a dead cell will turn it into a living cell.
-        if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> aliveRulesForDeadCells == n)) {
+        if (GameSettings.activeRuleEnum.DEAD_ALIVE.isActive()) {
             allEdgeNeighboursOfState(cell, CellState.ALIVE, CellState.ALIVE);
             allCornerNeighboursOfState(cell, CellState.ALIVE, CellState.ALIVE);
         }
     }
 
     private static void applyRulesForUndeadCell(Cell cell, int livingNeighbours, int deadNeighbours, int undeadNeighbours, int immortalNeighbours) {
-        int aliveRulesForUndeadCells = 8;
-        int deadRulesForUndeadCells = 9;
-        int undeadRulesForUndeadCells = 10;
-        int immortalRulesForUndeadCells = 11;
-
         // Undead cells die after some generations depending on their age and a random factor.
         if (cell.getGeneration() > new Random().nextInt(GameSettings.MAX_UNDEAD_AGE) +
                 (GameSettings.MAX_UNDEAD_AGE-cell.getGeneration())) {
@@ -97,27 +80,23 @@ public class GameLogic {
         }
 
         // Only dead cells around will kill an undead cell.
-        if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> deadRulesForUndeadCells == n)) {
+        if (GameSettings.activeRuleEnum.UNDEAD_DEAD.isActive()) {
             moreThanXNeighboursOfState(cell, 7, deadNeighbours, CellState.DEAD);
         }
 
         // Enough living cells around an undead cell bring it back to life.
-        if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> aliveRulesForUndeadCells == n)) {
+        if (GameSettings.activeRuleEnum.UNDEAD_ALIVE.isActive()) {
             moreThanXNeighboursOfState(cell, 4, livingNeighbours, CellState.ALIVE);
         }
 
         // Immortals can bring undead cells back to life.
-        if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> immortalRulesForUndeadCells == n)) {
+        if (GameSettings.activeRuleEnum.UNDEAD_IMMORTAL.isActive()) {
             moreThanXNeighboursOfState(cell, 1, immortalNeighbours, CellState.ALIVE);
         }
     }
 
     private static void applyRulesForImmortalCell(Cell cell, int livingNeighbours, int deadNeighbours, int undeadNeighbours, int immortalNeighbours) {
-        int aliveRulesForImmortalCells = 12;
-        int deadRulesForImmortalCells = 13;
-        int undeadRulesForImmortalCells = 14;
-        int immortalRulesForImmortalCells = 15;
-        if (Arrays.stream(GameSettings.activeRules).anyMatch(n -> undeadRulesForImmortalCells == n)) {
+        if (GameSettings.activeRuleEnum.IMMORTAL_UNDEAD.isActive()) {
             allEdgeNeighboursOfState(cell, CellState.UNDEAD, CellState.UNDEAD);
         }
     }
